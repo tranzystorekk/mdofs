@@ -27,3 +27,25 @@ where `<build type>` is one of {Debug, Release},
 #### Step 2: Build a target
 
 `cmake --build <build dest> --target <target name> -j<number_of_jobs>`
+
+### Components
+
+#### Simplefs
+
+This is the API for interacting with the filesystem.
+
+#### Utils
+
+These programs provide a user-friendly command line entry point to the filesystem.
+
+##### init
+
+##### cat
+
+##### ls
+
+##### mkdir
+
+##### mkfile
+
+##### rm
