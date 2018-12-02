@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package fsproto;
+
+option optimize_for = LITE_RUNTIME;
+
+message Inode {
+    required uint32 origin = 1;
+    required uint32 size = 2;
+    required uint32 mode = 3;
+}

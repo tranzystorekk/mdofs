@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package fsproto;
+
+option optimize_for = LITE_RUNTIME;
+
+message Directory {
+    message Record {
+        required string name = 1;
+        required uint32 inode_no = 2;
+    }
+
+    repeated Record records = 1;
+}
