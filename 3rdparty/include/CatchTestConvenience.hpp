@@ -1,5 +1,5 @@
-#ifndef CASCREL_CATCHTESTCONVENIENCE_HPP
-#define CASCREL_CATCHTESTCONVENIENCE_HPP
+#ifndef MDOFS_CATCHTESTCONVENIENCE_HPP
+#define MDOFS_CATCHTESTCONVENIENCE_HPP
 
 #include "catch.hpp"
 
@@ -11,4 +11,4 @@ TEST_CASE_METHOD( className, #className "." #testName )
 #define TC_METHOD_WITH_CLASS_NAME_TAGGED( className, testName, tags ) \
 TEST_CASE_METHOD( className, #className "." #testName, tags )
 
-#endif //CASCREL_CATCHTESTCONVENIENCE_HPP
+#endif //MDOFS_CATCHTESTCONVENIENCE_HPP
