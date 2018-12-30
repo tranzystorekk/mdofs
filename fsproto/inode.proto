@@ -5,7 +5,15 @@ package fsproto;
 option optimize_for = LITE_RUNTIME;
 
 message Inode {
-    required uint32 origin = 1;
-    required uint32 size = 2;
-    required uint32 mode = 3;
+    optional fixed32 origin = 1;
+    optional fixed32 size = 2;
+    optional fixed32 mode = 3;
+    optional bool is_free = 4;
+}
+
+message InodeTable {
+    repeated Inode inodes = 1;
+    optional fixed32 first_free_node_index = 2;
+    optional fixed32 filesystem_origin = 3;
+    optional fixed32 directory_size = 4;
 }
