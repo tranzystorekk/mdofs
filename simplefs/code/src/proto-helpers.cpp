@@ -20,15 +20,13 @@ void protohelpers::setInode(
 }
 
 void protohelpers::setInodeAsDirectory(fsproto::Inode* inode, unsigned int origin, unsigned int mode) {
-    setInode(inode, origin, MAX_DIRECTORY_SIZE, mode | AccessFlag::DIR, false);
+    setInode(inode, origin, MAX_DIRECTORY_SIZE + sizeof(uint32_t), mode | AccessFlag::DIR, false);
 }
 
 std::string protohelpers::lengthEncodeMsg(const google::protobuf::MessageLite& msg) {
     std::ostringstream oss;
 
     const uint32_t encodedSize = msg.ByteSizeLong();
-
-    std::cout << encodedSize << std::endl;
 
     oss.write(reinterpret_cast<const char*>(&encodedSize), sizeof(encodedSize));
     oss.write(msg.SerializeAsString().c_str(), encodedSize);
