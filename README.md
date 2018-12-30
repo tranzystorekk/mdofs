@@ -33,6 +33,10 @@ where `<build type>` is one of {Debug, Release},
 
 ### Components
 
+#### Fsproto
+
+Google Protobuf protocols for filesystem (de)serialization.
+
 #### Simplefs
 
 This is the API for interacting with the filesystem.
