@@ -1,4 +1,4 @@
-include_directories(app/include)
+include_directories(code/include)
 
-add_subdirectory(app)
+add_subdirectory(code)
 add_subdirectory(test)

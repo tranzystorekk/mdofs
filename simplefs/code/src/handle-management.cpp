@@ -1,0 +1,36 @@
+#include "handle-management.hpp"
+
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "common.h"
+
+int simplefs::openFilesystem(const char* fspath, int flags) {
+    if (isFilesystemOpen()) {
+        return -1;
+    }
+
+    const int checkHandle = open(fspath, flags);
+    if (checkHandle == -1) {
+        return -1;
+    }
+
+    FsHandle = checkHandle;
+
+    return 0;
+}
+
+int simplefs::closeFilesystem() {
+    if (!isFilesystemOpen()) {
+        return -1;
+    }
+
+    close(FsHandle);
+    FsHandle = simplefs::UNINITIALIZED_FS;
+
+    return 0;
+}
+
+bool simplefs::isFilesystemOpen() {
+    return simplefs::FsHandle != simplefs::UNINITIALIZED_FS;
+}

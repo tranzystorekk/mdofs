@@ -3,9 +3,12 @@ project(mdofs)
 
 set(CMAKE_CXX_STANDARD 11)
 
+find_package(Boost REQUIRED COMPONENTS system filesystem)
+
 include_directories(
         3rdparty/include
         fsproto/generated
+        simplefs/code/include
 )
 
 add_subdirectory(fsproto)
