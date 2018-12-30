@@ -10,7 +10,8 @@ Project developed for the UXP1A unix programming course at WUT.
 
 You need to have the following libraries/software installed:
 
-* protobuf (specifically protobuf-lite)
+* protobuf (specifically `protobuf-lite`)
+* boost (specifically the `system` and `filesystem` libraries)
 * cmake
 
 ### Building

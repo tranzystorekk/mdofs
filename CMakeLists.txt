@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
+if(NOT Boost_FOUND)
+    message(FATAL_ERROR "Could not find Boost library (system, filesystem)")
+endif(NOT Boost_FOUND)
+
 include_directories(
         3rdparty/include
         fsproto/generated
