@@ -1,5 +1,7 @@
 # mdofs
 
+Minimum Data Obfuscation filesystem
+
 A very simple userspace filesystem implementation with concurrent process access.
 
 Project developed for the UXP1A unix programming course at WUT.
