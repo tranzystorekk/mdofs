@@ -77,5 +77,7 @@ int main(int argc, char** argv) {
 
     fsinit::createFilesystem(fileArg.getValue(), maxFilesArg.getValue(), filesystemSize);
 
+    std::cout << "New mdofs instance \"" << fileArg.getValue() << "\" created successfully" << std::endl;
+
     return 0;
 }
