@@ -20,8 +20,7 @@ void protohelpers::setInode(
 }
 
 void protohelpers::setInodeAsDirectory(fsproto::Inode* inode, unsigned int origin, unsigned int mode) {
-    //FIXME calculate dir size
-    setInode(inode, origin, 0, mode | AccessFlag::DIR, false);
+    setInode(inode, origin, MAX_DIRECTORY_SIZE, mode | AccessFlag::DIR, false);
 }
 
 std::string protohelpers::lengthEncodeMsg(const google::protobuf::MessageLite& msg) {

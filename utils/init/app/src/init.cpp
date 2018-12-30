@@ -55,7 +55,7 @@ void fsinit::createFilesystem(const std::string& filepath, unsigned int maxFiles
     InodeTable table;
     table.set_first_free_node_index(FIRST_FREE_NODE_INDEX);
     table.set_filesystem_origin(0);
-    table.set_directory_size(0);
+    table.set_directory_size(simplefs::MAX_DIRECTORY_SIZE);
 
     Inode* root = table.add_inodes();
     setInodeAsDirectory(root, 0, AccessFlag::RWEX);

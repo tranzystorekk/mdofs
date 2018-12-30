@@ -1,9 +1,29 @@
 #ifndef MDOFS_COMMON_H
 #define MDOFS_COMMON_H
 
+#include <cstdint>
+
 #define MAX_FILE_DESCRIPTORS 64
 
 namespace simplefs {
+
+constexpr unsigned int HighestBit(unsigned int v, unsigned int n = sizeof(uint32_t) * 8) {
+    return ( v & (1 << (n - 1)) || n == 0 ) ? n : HighestBit(v, n - 1);
+}
+
+constexpr unsigned int MaxLengthEncodeSize(unsigned int bytes) {
+    return HighestBit(bytes) / 7 + ((HighestBit(bytes) % 7) ? 1 : 0);
+}
+
+const unsigned int MAX_RECORDS_IN_DIRECTORY = 16;
+const unsigned int MAX_FILENAME_LENGTH = 64;
+
+const unsigned int MAX_RECORD_SIZE = MAX_FILENAME_LENGTH + MaxLengthEncodeSize(MAX_FILENAME_LENGTH)
+        + sizeof(uint32_t) + 2;
+
+const unsigned int MAX_DIRECTORY_SIZE = MAX_RECORDS_IN_DIRECTORY * MAX_RECORD_SIZE
+        + MaxLengthEncodeSize(MAX_RECORD_SIZE) * MAX_RECORDS_IN_DIRECTORY
+        + MAX_RECORDS_IN_DIRECTORY;
 
 const int UNINITIALIZED_FS = -1;
 
