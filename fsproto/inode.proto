@@ -15,5 +15,6 @@ message InodeTable {
     repeated Inode inodes = 1;
     optional fixed32 first_free_node_index = 2;
     optional fixed32 filesystem_origin = 3;
-    optional fixed32 directory_size = 4;
+    optional fixed32 first_free_byte = 4;
+    optional fixed32 directory_size = 5;
 }
