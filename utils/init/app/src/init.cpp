@@ -17,6 +17,7 @@
 
 static const unsigned int FIRST_FREE_NODE_INDEX = 1;
 
+using boost::filesystem::absolute;
 using boost::filesystem::exists;
 using fsproto::Directory;
 using fsproto::Inode;
@@ -31,6 +32,10 @@ bool fileExists(const std::string& filename) {
     return exists(Path(filename));
 }
 
+bool parentPathExists(const std::string& filename) {
+    return exists( absolute(Path(filename)).parent_path() );
+}
+
 void fillInodeTable(InodeTable& table, unsigned int targetSize) {
     while (table.inodes_size() < targetSize) {
         Inode* node = table.add_inodes();
@@ -41,6 +46,10 @@ void fillInodeTable(InodeTable& table, unsigned int targetSize) {
 void fsinit::createFilesystem(const std::string& filepath, unsigned int maxFiles, unsigned int size) {
     if ( fileExists(filepath) ) {
         std::cerr << "Error: specified file already exists" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    if ( !parentPathExists(filepath) ) {
+        std::cerr << "Error: parent path of specified file does not exist" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
