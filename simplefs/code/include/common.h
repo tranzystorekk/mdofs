@@ -3,8 +3,6 @@
 
 #include <cstdint>
 
-#define MAX_FILE_DESCRIPTORS 64
-
 namespace simplefs {
 
 constexpr unsigned int HighestBit(unsigned int v, unsigned int n = sizeof(uint32_t) * 8) {
@@ -40,10 +38,12 @@ struct FileDescriptor {
     bool is_free;
 };
 
+const unsigned int MAX_FILE_DESCRIPTORS = 64;
+
 // for each process start with fs handle uninitialized
 // and all descriptors closed
-static int FsHandle = UNINITIALIZED_FS;
-static FileDescriptor FdTable[MAX_FILE_DESCRIPTORS];
+extern int FsHandle;
+extern FileDescriptor FdTable[MAX_FILE_DESCRIPTORS];
 
 enum AccessFlag : unsigned int {
     DIR = 0x8,
