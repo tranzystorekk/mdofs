@@ -3,6 +3,10 @@
 
 #include <cstdint>
 
+#include <fcntl.h>
+
+#include "inode.pb.h"
+
 namespace simplefs {
 
 constexpr unsigned int HighestBit(unsigned int v, unsigned int n = sizeof(uint32_t) * 8) {
@@ -37,6 +41,7 @@ struct FileDescriptor {
     int inode;
     unsigned int fpos;
     unsigned int flag;
+    struct flock lock;
     bool is_free;
 };
 
@@ -47,6 +52,10 @@ const unsigned int MAX_FILE_DESCRIPTORS = 64;
 extern int FsHandle;
 extern FileDescriptor FdTable[MAX_FILE_DESCRIPTORS];
 extern unsigned int FirstFreeDescriptor;
+extern unsigned int NumActiveDescriptors;
+
+extern fsproto::InodeTable Inodes;
+extern struct flock InodesLockParams;
 
 enum AccessFlag : unsigned int {
     DIR = 0x8,

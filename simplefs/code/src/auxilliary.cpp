@@ -29,14 +29,12 @@ int simplefs::lookup(const char* pathname) {
         return -1;
     }
 
-    auto inodeTable = simplefs::getInodeTable();
-
     // start from root inode
     int currentInodeIndex = 0;
     std::stack<struct flock> directoryLocks;
     const Path directories = path.relative_path().remove_filename();
     for ( auto& el : directories ) {
-        auto dir = getDirectory(inodeTable.second, currentInodeIndex);
+        auto dir = getDirectory(simplefs::Inodes, currentInodeIndex);
         directoryLocks.push(dir.first);
 
         auto& records = dir.second.records();
@@ -52,7 +50,7 @@ int simplefs::lookup(const char* pathname) {
     }
 
     if ( currentInodeIndex != -1 ) {
-        auto parentDir = getDirectory(inodeTable.second, currentInodeIndex);
+        auto parentDir = getDirectory(simplefs::Inodes, currentInodeIndex);
         directoryLocks.push(parentDir.first);
 
         auto& parentRecords = parentDir.second.records();
@@ -69,8 +67,6 @@ int simplefs::lookup(const char* pathname) {
         unlock(directoryLocks.top());
         directoryLocks.pop();
     }
-
-    unlock(inodeTable.first);
 
     return result;
 }
