@@ -5,6 +5,9 @@
 
 #include "common.h"
 
+using simplefs::FsHandle;
+using simplefs::UNINITIALIZED_FS;
+
 int simplefs::openFilesystem(const char* fspath, int flags) {
     if (isFilesystemOpen()) {
         return -1;
@@ -26,11 +29,11 @@ int simplefs::closeFilesystem() {
     }
 
     close(FsHandle);
-    FsHandle = simplefs::UNINITIALIZED_FS;
+    FsHandle = UNINITIALIZED_FS;
 
     return 0;
 }
 
 bool simplefs::isFilesystemOpen() {
-    return simplefs::FsHandle != simplefs::UNINITIALIZED_FS;
+    return FsHandle != UNINITIALIZED_FS;
 }

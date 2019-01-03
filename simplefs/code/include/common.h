@@ -25,16 +25,18 @@ const unsigned int MAX_DIRECTORY_SIZE = MAX_RECORDS_IN_DIRECTORY * MAX_RECORD_SI
 
 const int UNINITIALIZED_FS = -1;
 
-enum DescriptorFlag {
-    DESCR_READ = 0x2,
-    DESCR_WRITE = 0x1
+enum DescriptorFlag : unsigned int {
+    DESCR_READ = 0x4,
+    DESCR_WRITE = 0x2,
+    DESCR_RDWR = DESCR_READ | DESCR_WRITE
 };
 
 struct FileDescriptor {
     FileDescriptor() : is_free(true) {}
 
     int inode;
-    DescriptorFlag flag;
+    unsigned int fpos;
+    unsigned int flag;
     bool is_free;
 };
 
@@ -44,6 +46,7 @@ const unsigned int MAX_FILE_DESCRIPTORS = 64;
 // and all descriptors closed
 extern int FsHandle;
 extern FileDescriptor FdTable[MAX_FILE_DESCRIPTORS];
+extern unsigned int FirstFreeDescriptor;
 
 enum AccessFlag : unsigned int {
     DIR = 0x8,

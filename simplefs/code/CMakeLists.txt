@@ -3,6 +3,8 @@ add_library(
         src/proto-helpers.cpp
         src/auxilliary.cpp
         src/handle-management.cpp
+        src/locking.cpp
+        src/open.cpp
         src/shared-vars.cpp
 )
 

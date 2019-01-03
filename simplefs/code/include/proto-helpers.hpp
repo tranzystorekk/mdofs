@@ -2,6 +2,9 @@
 #define MDOFS_PROTO_HELPERS_HPP
 
 #include <string>
+#include <utility>
+
+#include <fcntl.h>
 
 #include "directory.pb.h"
 #include "inode.pb.h"

@@ -3,12 +3,19 @@
 #include <memory>
 #include <sstream>
 
+#include <unistd.h>
+
 #include "common.h"
+#include "locking.h"
 
 using namespace simplefs;
 
+using fsproto::Directory;
+using fsproto::Inode;
+using google::protobuf::MessageLite;
+
 void protohelpers::setInode(
-        fsproto::Inode* inode,
+        Inode* inode,
         unsigned int origin,
         unsigned int size,
         unsigned int mode,
@@ -19,11 +26,11 @@ void protohelpers::setInode(
     inode->set_is_free(is_free);
 }
 
-void protohelpers::setInodeAsDirectory(fsproto::Inode* inode, unsigned int origin, unsigned int mode) {
+void protohelpers::setInodeAsDirectory(Inode* inode, unsigned int origin, unsigned int mode) {
     setInode(inode, origin, MAX_DIRECTORY_SIZE + sizeof(uint32_t), mode | AccessFlag::DIR, false);
 }
 
-std::string protohelpers::lengthEncodeMsg(const google::protobuf::MessageLite& msg) {
+std::string protohelpers::lengthEncodeMsg(const MessageLite& msg) {
     std::ostringstream oss;
 
     const uint32_t encodedSize = msg.ByteSizeLong();
@@ -34,17 +41,17 @@ std::string protohelpers::lengthEncodeMsg(const google::protobuf::MessageLite& m
     return oss.str();
 }
 
-fsproto::Directory protohelpers::decodeDirectory(const std::string& str) {
+Directory protohelpers::decodeDirectory(const std::string& str) {
     std::istringstream iss(str);
     uint32_t encodedSize;
 
     iss.read(reinterpret_cast<char*>(&encodedSize), sizeof(encodedSize));
 
-    std::unique_ptr<char> decodeBuffer(new char[encodedSize]);
+    std::unique_ptr<char[]> decodeBuffer(new char[encodedSize]);
 
     iss.read(decodeBuffer.get(), encodedSize);
 
-    fsproto::Directory result;
+    Directory result;
     result.ParseFromArray(decodeBuffer.get(), encodedSize);
 
     return result;
