@@ -12,6 +12,8 @@ enum LockType {
 
 struct flock lock(off_t offset, off_t size, LockType type);
 
+void lockToWrite(const struct flock& lockParams);
+
 void unlock(struct flock& params);
 
 } // simplefs

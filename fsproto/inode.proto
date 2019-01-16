@@ -17,4 +17,5 @@ message InodeTable {
     optional fixed32 filesystem_origin = 3;
     optional fixed32 first_free_byte = 4;
     optional fixed32 directory_size = 5;
+    optional fixed32 max_inodes = 6;
 }

@@ -26,6 +26,10 @@ struct flock simplefs::lock(off_t offset, off_t size, simplefs::LockType type) {
     return lockParams;
 }
 
+void simplefs::lockToWrite(const struct flock& lockParams) {
+    simplefs::lock(lockParams.l_start, lockParams.l_len, LockType::WRLK);
+}
+
 void simplefs::unlock(struct flock& params) {
     params.l_type = F_UNLCK;
     fcntl(FsHandle, F_SETLKW, &params);

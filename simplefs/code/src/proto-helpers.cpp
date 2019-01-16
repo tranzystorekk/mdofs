@@ -27,7 +27,7 @@ void protohelpers::setInode(
 }
 
 void protohelpers::setInodeAsDirectory(Inode* inode, unsigned int origin, unsigned int mode) {
-    setInode(inode, origin, MAX_DIRECTORY_SIZE + sizeof(uint32_t), mode | AccessFlag::DIR, false);
+    setInode(inode, origin, MAX_ENCODED_DIRECTORY_SIZE, mode | AccessFlag::DIR, false);
 }
 
 std::string protohelpers::lengthEncodeMsg(const MessageLite& msg) {

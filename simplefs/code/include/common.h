@@ -27,6 +27,8 @@ const unsigned int MAX_DIRECTORY_SIZE = MAX_RECORDS_IN_DIRECTORY * MAX_RECORD_SI
         + MaxLengthEncodeSize(MAX_RECORD_SIZE) * MAX_RECORDS_IN_DIRECTORY
         + MAX_RECORDS_IN_DIRECTORY;
 
+const unsigned int MAX_ENCODED_DIRECTORY_SIZE = MAX_DIRECTORY_SIZE + sizeof(uint32_t);
+
 const int UNINITIALIZED_FS = -1;
 
 enum DescriptorFlag : unsigned int {

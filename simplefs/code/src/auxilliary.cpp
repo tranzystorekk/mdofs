@@ -5,6 +5,8 @@
 #include <stack>
 #include <string>
 
+#include <cstring>
+
 #include "common.h"
 #include "locking.h"
 #include "proto-helpers.hpp"
@@ -16,7 +18,7 @@ using fsproto::Inode;
 using fsproto::InodeTable;
 using Path = boost::filesystem::path;
 
-int simplefs::lookup(const char* pathname) {
+int simplefs::lookup(const char* pathname, LockType lockType) {
     const Path path(pathname);
     int result = -1;
 
@@ -29,12 +31,16 @@ int simplefs::lookup(const char* pathname) {
         return -1;
     }
 
+    if (!std::strcmp("/", pathname)) {
+        return 0;
+    }
+
     // start from root inode
     int currentInodeIndex = 0;
     std::stack<struct flock> directoryLocks;
     const Path directories = path.relative_path().remove_filename();
     for ( auto& el : directories ) {
-        auto dir = getDirectory(simplefs::Inodes, currentInodeIndex);
+        auto dir = getDirectory(simplefs::Inodes, currentInodeIndex, WRLK);
         directoryLocks.push(dir.first);
 
         auto& records = dir.second.records();
@@ -50,7 +56,7 @@ int simplefs::lookup(const char* pathname) {
     }
 
     if ( currentInodeIndex != -1 ) {
-        auto parentDir = getDirectory(simplefs::Inodes, currentInodeIndex);
+        auto parentDir = getDirectory(simplefs::Inodes, currentInodeIndex, WRLK);
         directoryLocks.push(parentDir.first);
 
         auto& parentRecords = parentDir.second.records();
@@ -71,7 +77,7 @@ int simplefs::lookup(const char* pathname) {
     return result;
 }
 
-std::pair<flock, InodeTable> simplefs::getInodeTable() {
+std::pair<struct flock, fsproto::InodeTable> simplefs::getInodeTable(LockType lockType) {
     const off_t lastPosition = lseek(FsHandle, 0, SEEK_CUR);
     lseek(FsHandle, 0, SEEK_SET);
 
@@ -79,7 +85,7 @@ std::pair<flock, InodeTable> simplefs::getInodeTable() {
     read(FsHandle, &inodeTableSize, sizeof(uint32_t));
 
     // get lock on actual table
-    struct flock inodeTableLockParams = lock(sizeof(uint32_t), inodeTableSize, LockType::RDLK);
+    struct flock inodeTableLockParams = lock(sizeof(uint32_t), inodeTableSize, lockType);
 
     std::unique_ptr<char[]> buffer(new char[inodeTableSize]);
 
@@ -93,7 +99,8 @@ std::pair<flock, InodeTable> simplefs::getInodeTable() {
     return std::make_pair(inodeTableLockParams, result);
 }
 
-std::pair<struct flock, Directory> simplefs::getDirectory(const InodeTable& table, int inode) {
+std::pair<struct flock, fsproto::Directory>
+simplefs::getDirectory(const fsproto::InodeTable& table, int inode, LockType lockType) {
     const Inode& node = table.inodes(inode);
 
     if ( node.is_free() ) {
@@ -105,7 +112,7 @@ std::pair<struct flock, Directory> simplefs::getDirectory(const InodeTable& tabl
 
     auto lockParams = lock(node.origin() + table.filesystem_origin(),
             MAX_DIRECTORY_SIZE + sizeof(uint32_t),
-            LockType::RDLK);
+            lockType);
 
     char buffer[MAX_DIRECTORY_SIZE + sizeof(uint32_t)];
 

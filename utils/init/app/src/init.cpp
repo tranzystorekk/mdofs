@@ -68,8 +68,10 @@ void fsinit::createFilesystem(const std::string& filepath, unsigned int maxFiles
 
     // directories are length encoded with their effective size
     // but preallocated according to the Maximum Size
-    const unsigned int directorySize = simplefs::MAX_DIRECTORY_SIZE + sizeof(uint32_t);
-    table.set_directory_size(directorySize);
+//    const unsigned int directorySize = simplefs::MAX_DIRECTORY_SIZE + sizeof(uint32_t);
+    table.set_directory_size(simplefs::MAX_ENCODED_DIRECTORY_SIZE);
+
+    table.set_max_inodes(maxFiles);
 
     Inode* root = table.add_inodes();
     setInodeAsDirectory(root, 0, AccessFlag::RWEX);
@@ -80,7 +82,7 @@ void fsinit::createFilesystem(const std::string& filepath, unsigned int maxFiles
     const size_t tableSize = table.ByteSizeLong() + sizeof(uint32_t);
 
     table.set_filesystem_origin(tableSize);
-    table.set_first_free_byte(tableSize + directorySize);
+    table.set_first_free_byte(simplefs::MAX_ENCODED_DIRECTORY_SIZE);
 
     // create new filesystem file and resize it to desired length
     int newFile = creat(filepath.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);

@@ -5,6 +5,7 @@ add_library(
         src/handle-management.cpp
         src/locking.cpp
         src/open.cpp
+        src/mkdir.cpp
         src/shared-vars.cpp
 )
 

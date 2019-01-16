@@ -36,14 +36,20 @@ int simplefs::open(const char* name, int flags) {
         return -1;
     }
 
+    LockType lockType = LockType::RDLK;
+    if (flags & AccessFlag::WRITE) {
+        lockType = LockType::WRLK;
+    }
+
     if ( !simplefs::NumActiveDescriptors ) {
-        auto inodeAndLock = getInodeTable();
+        auto inodeAndLock = getInodeTable(lockType);
 
         simplefs::InodesLockParams = inodeAndLock.first;
         simplefs::Inodes = inodeAndLock.second;
     }
 
-    int node = simplefs::lookup(name);
+    // lookup file path
+    int node = simplefs::lookup(name, lockType);
 
     if (node == -1) {
         return -1;
@@ -93,7 +99,7 @@ int simplefs::close(int fd) {
 
     if ( closedDescriptor.is_free ) {
         // TODO error
-        return -1
+        return -1;
     }
 
     // unlock the locked file
