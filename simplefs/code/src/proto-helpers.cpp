@@ -33,7 +33,7 @@ void protohelpers::setInodeAsDirectory(Inode* inode, unsigned int origin, unsign
 std::string protohelpers::lengthEncodeMsg(const MessageLite& msg) {
     std::ostringstream oss;
 
-    const uint32_t encodedSize = msg.ByteSizeLong();
+    const uint32_t encodedSize = msg.ByteSize();
 
     oss.write(reinterpret_cast<const char*>(&encodedSize), sizeof(encodedSize));
     oss.write(msg.SerializeAsString().c_str(), encodedSize);

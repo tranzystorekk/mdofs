@@ -79,7 +79,7 @@ void fsinit::createFilesystem(const std::string& filepath, unsigned int maxFiles
     fillInodeTable(table, maxFiles);
 
     // size of inode table plus length encoding
-    const size_t tableSize = table.ByteSizeLong() + sizeof(uint32_t);
+    const size_t tableSize = table.ByteSize() + sizeof(uint32_t);
 
     table.set_filesystem_origin(tableSize);
     table.set_first_free_byte(simplefs::MAX_ENCODED_DIRECTORY_SIZE);

@@ -39,5 +39,5 @@ TEST_CASE("MaxDirectorySizeIsCorrect") {
     Directory dir;
     fillDirectory(dir);
 
-    REQUIRE_EQ(simplefs::MAX_DIRECTORY_SIZE, dir.ByteSizeLong());
+    REQUIRE_EQ(simplefs::MAX_DIRECTORY_SIZE, dir.ByteSize());
 }
