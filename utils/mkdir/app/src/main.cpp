@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
                                   true, "", "path");
     cmd.add(fileArg);
 
-    UnlabeledValueArg<std::string> pathArg("path", "Path to the file in filesystem", true, "", "path");
+    UnlabeledValueArg<std::string> pathArg("path", "Path to the new directory within the filesystem", true, "", "path");
     cmd.add(pathArg);
 
     try {
