@@ -1,7 +1,9 @@
 #include <iostream>
 
+#include "open.h"
+#include "opendir.h"
+
 #include "handle-management.hpp"
-#include "mkdir.h"
 
 #include "tclap/CmdLine.h"
 #include "tclap/ValueArg.h"
@@ -18,7 +20,7 @@ int main(int argc, char** argv) {
                                   true, "", "path");
     cmd.add(fileArg);
 
-    UnlabeledValueArg<std::string> pathArg("path", "Path to the new directory within the filesystem", true, "", "path");
+    UnlabeledValueArg<std::string> pathArg("path", "Path to the listed directory", true, "", "path");
     cmd.add(pathArg);
 
     try {
@@ -28,17 +30,21 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    simplefs::openFilesystem(fileArg.getValue().c_str(), O_RDWR);
+    simplefs::openFilesystem(fileArg.getValue().c_str(), O_RDONLY);
 
-    const int errCode = simplefs::mkdir(pathArg.getValue().c_str());
+    simplefs::Dir listedDir = simplefs::opendir(pathArg.getValue().c_str());
 
-    if (errCode) {
-        std::cerr << "mkdir operation failed" << std::endl;
+    if (listedDir.first == -1) {
+        std::cerr << "Could not list contents of \"" << pathArg.getValue() << "\"" << std::endl;
 
-        return 1;
+        return -1;
     }
 
-    std::cout << "Directory \"" << pathArg.getValue() << "\" was created successfully" << std::endl;
+    for (auto& record : *listedDir.second.mutable_records()) {
+        std::cout << record.first << '\n';
+    }
+
+    simplefs::close(listedDir.first);
 
     simplefs::closeFilesystem();
 

@@ -6,6 +6,7 @@ add_library(
         src/locking.cpp
         src/open.cpp
         src/mkdir.cpp
+        src/opendir.cpp
         src/shared-vars.cpp
 )
 
