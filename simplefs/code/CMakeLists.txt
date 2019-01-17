@@ -7,6 +7,7 @@ add_library(
         src/open.cpp
         src/mkdir.cpp
         src/opendir.cpp
+        src/creat.cpp
         src/shared-vars.cpp
 )
 
