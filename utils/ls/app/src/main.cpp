@@ -30,14 +30,19 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    simplefs::openFilesystem(fileArg.getValue().c_str(), O_RDONLY);
+    const int errCode = simplefs::openFilesystem(fileArg.getValue().c_str(), O_RDONLY);
+
+    if (errCode) {
+        std::cerr << "Failed to open filesystem file \"" << fileArg.getValue() << '\"' << std::endl;
+        return 1;
+    }
 
     simplefs::Dir listedDir = simplefs::opendir(pathArg.getValue().c_str());
 
     if (listedDir.first == -1) {
         std::cerr << "Could not list contents of \"" << pathArg.getValue() << "\"" << std::endl;
 
-        return -1;
+        return 1;
     }
 
     for (auto& record : *listedDir.second.mutable_records()) {

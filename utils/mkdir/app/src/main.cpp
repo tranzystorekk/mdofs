@@ -28,11 +28,16 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    simplefs::openFilesystem(fileArg.getValue().c_str(), O_RDWR);
-
-    const int errCode = simplefs::mkdir(pathArg.getValue().c_str());
+    const int errCode = simplefs::openFilesystem(fileArg.getValue().c_str(), O_RDWR);
 
     if (errCode) {
+        std::cerr << "Failed to open filesystem file\"" << fileArg.getValue() << '\"' << std::endl;
+        return 1;
+    }
+
+    const int mkdirErrCode = simplefs::mkdir(pathArg.getValue().c_str());
+
+    if (mkdirErrCode) {
         std::cerr << "mkdir operation failed" << std::endl;
 
         return 1;
