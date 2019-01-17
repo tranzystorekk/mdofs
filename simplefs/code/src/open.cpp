@@ -13,24 +13,6 @@ unsigned int findNextFreeDescriptor() {
     return simplefs::MAX_FILE_DESCRIPTORS;
 }
 
-void setDescriptor2(simplefs::FileDescriptor& fd, int inode, const struct flock& lock, int flag) {
-    fd.inode = inode;
-    fd.fpos = 0;
-    fd.lock = lock;
-    fd.flag = flag;
-    fd.is_free = false;
-}
-
-unsigned int getNextFreeDescriptor2() {
-    for (unsigned int i = simplefs::FirstFreeDescriptor + 1; i < simplefs::MAX_FILE_DESCRIPTORS; ++i) {
-        if ( simplefs::FdTable[i].is_free ) {
-            return i;
-        }
-    }
-
-    return simplefs::MAX_FILE_DESCRIPTORS;
-}
-
 int simplefs::open(const char* name, int flags) {
     if ( simplefs::NumActiveDescriptors >= simplefs::MAX_FILE_DESCRIPTORS ) {
         return -1;
@@ -78,11 +60,11 @@ int simplefs::open(const char* name, int flags) {
                                     LockType::RDLK);
     }
 
-    setDescriptor2(simplefs::FdTable[simplefs::FirstFreeDescriptor], node, lockParams, flags);
+    simplefs::setDescriptor(simplefs::FdTable[simplefs::FirstFreeDescriptor], node, lockParams, flags);
 
     const int result = simplefs::FirstFreeDescriptor;
 
-    simplefs::FirstFreeDescriptor = getNextFreeDescriptor2();
+    simplefs::FirstFreeDescriptor = simplefs::getNextFreeDescriptor();
 
     ++simplefs::NumActiveDescriptors;
 

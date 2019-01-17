@@ -128,3 +128,21 @@ simplefs::getDirectory(const fsproto::InodeTable& table, int inode, LockType loc
 
     return std::make_pair(lockParams, dir);
 }
+
+void simplefs::setDescriptor(simplefs::FileDescriptor& fd, int inode, const struct flock& lock, int flag) {
+    fd.inode = inode;
+    fd.fpos = 0;
+    fd.lock = lock;
+    fd.flag = flag;
+    fd.is_free = false;
+}
+
+unsigned int simplefs::getNextFreeDescriptor() {
+    for (unsigned int i = simplefs::FirstFreeDescriptor + 1; i < simplefs::MAX_FILE_DESCRIPTORS; ++i) {
+        if ( simplefs::FdTable[i].is_free ) {
+            return i;
+        }
+    }
+
+    return simplefs::MAX_FILE_DESCRIPTORS;
+}

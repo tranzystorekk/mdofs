@@ -5,6 +5,8 @@
 
 #include <fcntl.h>
 
+#include "common.h"
+
 #include "locking.h"
 
 #include "directory.pb.h"
@@ -18,6 +20,10 @@ std::pair<struct flock, fsproto::InodeTable> getInodeTable(LockType lockType);
 
 std::pair<struct flock, fsproto::Directory>
 getDirectory(const fsproto::InodeTable& table, int inode, LockType lockType);
+
+void setDescriptor(FileDescriptor& fd, int inode, const struct flock& lock, int flag);
+
+unsigned int getNextFreeDescriptor();
 
 } // simplefs
 

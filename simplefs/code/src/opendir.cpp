@@ -5,24 +5,6 @@
 #include "locking.h"
 #include "proto-helpers.hpp"
 
-void setDescriptor(simplefs::FileDescriptor& fd, int inode, const struct flock& lock, int flag) {
-    fd.inode = inode;
-    fd.fpos = 0;
-    fd.lock = lock;
-    fd.flag = flag;
-    fd.is_free = false;
-}
-
-unsigned int getNextFreeDescriptor() {
-    for (unsigned int i = simplefs::FirstFreeDescriptor + 1; i < simplefs::MAX_FILE_DESCRIPTORS; ++i) {
-        if ( simplefs::FdTable[i].is_free ) {
-            return i;
-        }
-    }
-
-    return simplefs::MAX_FILE_DESCRIPTORS;
-}
-
 simplefs::Dir simplefs::opendir(const char* name) {
     if ( simplefs::NumActiveDescriptors >= simplefs::MAX_FILE_DESCRIPTORS ) {
         return std::make_pair(-1, fsproto::Directory());
