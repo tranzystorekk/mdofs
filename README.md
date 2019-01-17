@@ -29,7 +29,7 @@ where `<build type>` is one of {Debug, Release},
 
 #### Step 2: Build a target
 
-`cmake --build <build dest> --target <target name> -j<number_of_jobs>`
+`cmake --build <build dest> --target <target name>`
 
 ### Components
 
