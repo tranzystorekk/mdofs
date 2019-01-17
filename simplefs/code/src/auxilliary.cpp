@@ -146,3 +146,11 @@ unsigned int simplefs::getNextFreeDescriptor() {
 
     return simplefs::MAX_FILE_DESCRIPTORS;
 }
+
+std::string simplefs::getParentDirectory(const char* path) {
+    return Path(path).parent_path().string();
+}
+
+std::string simplefs::getBaseName(const char* path) {
+    return Path(path).filename().string();
+}

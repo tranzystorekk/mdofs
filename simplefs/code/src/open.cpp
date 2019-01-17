@@ -15,6 +15,7 @@ unsigned int findNextFreeDescriptor() {
 
 int simplefs::open(const char* name, int flags) {
     if ( simplefs::NumActiveDescriptors >= simplefs::MAX_FILE_DESCRIPTORS ) {
+        // TODO error
         return -1;
     }
 

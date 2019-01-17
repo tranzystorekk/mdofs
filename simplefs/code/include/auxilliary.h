@@ -25,6 +25,10 @@ void setDescriptor(FileDescriptor& fd, int inode, const struct flock& lock, int 
 
 unsigned int getNextFreeDescriptor();
 
+std::string getParentDirectory(const char* path);
+
+std::string getBaseName(const char* path);
+
 } // simplefs
 
 #endif //MDOFS_AUXILLIARY_H

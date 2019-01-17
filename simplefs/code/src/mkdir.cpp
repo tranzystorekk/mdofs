@@ -4,23 +4,10 @@
 
 #include <unistd.h>
 
-#include <boost/filesystem.hpp>
-
 #include "auxilliary.h"
 #include "common.h"
 #include "locking.h"
 #include "proto-helpers.hpp"
-
-using boost::filesystem::absolute;
-using Path = boost::filesystem::path;
-
-std::string getParentDirectory(const char* path) {
-    return Path(path).parent_path().string();
-}
-
-std::string getBaseName(const char* path) {
-    return Path(path).filename().string();
-}
 
 int simplefs::mkdir(const char* name) {
     const bool noActiveDescriptors = !simplefs::NumActiveDescriptors;
@@ -41,7 +28,7 @@ int simplefs::mkdir(const char* name) {
         }
     }
 
-    const std::string& parentPath = getParentDirectory(name);
+    const std::string& parentPath = simplefs::getParentDirectory(name);
     int parentDirNodeIndex = simplefs::lookup(parentPath.c_str(), LockType::WRLK);
 
     if ( parentDirNodeIndex == -1 ) {
@@ -57,8 +44,7 @@ int simplefs::mkdir(const char* name) {
         simplefs::lockToWrite(simplefs::InodesLockParams);
     }
 
-    // TODO rest of impl
-    auto parentDirAndLock = getDirectory(simplefs::Inodes, parentDirNodeIndex, LockType::WRLK);
+    auto parentDirAndLock = simplefs::getDirectory(simplefs::Inodes, parentDirNodeIndex, LockType::WRLK);
 
     // check if directory full
     if (parentDirAndLock.second.records_size() >= MAX_RECORDS_IN_DIRECTORY) {
@@ -73,7 +59,8 @@ int simplefs::mkdir(const char* name) {
     }
 
     // check if requested dir name already exists
-    if (parentDirAndLock.second.mutable_records()->count(name)) {
+    const std::string dirBaseName = simplefs::getBaseName(name);
+    if (parentDirAndLock.second.records().count(dirBaseName)) {
         // unlock all created locks
         if (noActiveDescriptors) {
             unlock(tempLockParams);
@@ -119,7 +106,7 @@ int simplefs::mkdir(const char* name) {
 
     // add new dir record to parent directory
     auto parentRecords = parentDirAndLock.second.mutable_records();
-    parentRecords->insert({getBaseName(name).c_str(), freeNodeIndex});
+    parentRecords->insert({dirBaseName.c_str(), freeNodeIndex});
 
     // make new dir
     fsproto::Directory newDirectory;
