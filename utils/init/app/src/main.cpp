@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include <cstdint>
+
 #include "tclap/CmdLine.h"
 #include "tclap/ValueArg.h"
 
@@ -42,6 +44,10 @@ unsigned int parseSize(const std::string& s) {
         }
     }
 
+    if (result > UINT32_MAX) {
+        return 0;
+    }
+
     return result;
 }
 
@@ -57,7 +63,8 @@ int main(int argc, char** argv) {
     cmd.add(maxFilesArg);
 
     ValueArg<std::string> sizeArg("", "size",
-            "Effective filesystem size [in bytes or K - kilobytes, M - megabytes, G - gigabytes] (Default: 1M)",
+            "Effective filesystem size [in bytes or K - kilobytes, M - megabytes, G - gigabytes] (Default: 1M)."
+            " Warning: supports only sizes lower than 4G",
             false, "1M", "size format");
     cmd.add(sizeArg);
 
