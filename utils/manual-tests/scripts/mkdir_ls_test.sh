@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-containsElement () {
-  local e match="$1"
-  shift
-  for e; do [[ "$e" == "$match" ]] && return 0; done
-  return 1
-}
-
 PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 TEST_FILES_PATH="$PROJECT_ROOT/utils/manual-tests/test-files"
 
@@ -28,7 +21,7 @@ fi
 
 echo "Testing / contains . and .."
 
-if [[ $(containsElement '.' "${RECORDS[@]}") -eq 0 && $(containsElement '..' "${RECORDS[@]}") -eq 0 ]]
+if [[ "${RECORDS[@]}" =~ "." && "${RECORDS[@]}" =~ ".." ]]
 then
     echo "Passed"
 else
@@ -108,7 +101,7 @@ fi
 
 echo "Testing if folder is in root directory"
 
-if [[ $(containsElement "folder" "${RECORDS[@]}") -eq 0 ]]
+if [[ "${RECORDS[@]}" =~ "folder" ]]
 then
     echo "Passed"
 else
@@ -129,7 +122,7 @@ fi
 echo "Testing if in folder there is . and .."
 
 
-if [[ $(containsElement '.' "${RECORDS_FOLDER[@]}") -eq 0 && $(containsElement '..' "${RECORDS_FOLDER[@]}") -eq 0 ]]
+if [[ "${RECORDS_FOLDER[@]}" =~ "." && "${RECORDS_FOLDER[@]}" =~ ".." ]]
 then
     echo "Passed"
 else
@@ -138,9 +131,101 @@ fi
 
 rm -f test.mdofs
 
-#echo "Testing dir2 inside dir1"
-#init -f test.mdofs >/dev/null 2>&1
-#mkdir -f test.mdofs "/dir1/"
-#mkdir -f test.mdofs "/dir1/dir2"
+########################################################
 
-#RECORDS_FOLDER=($(ls -f test.mdofs "/))
+echo "Testing dir2 inside dir1 - three records in dir1"
+
+init -f test.mdofs >/dev/null 2>&1
+mkdir -f test.mdofs "/dir1" >/dev/null 2>&1
+mkdir -f test.mdofs "/dir1/dir2" >/dev/null 2>&1
+
+RECORDS=($(ls -f test.mdofs "/"))
+
+echo "Testing if in / there are still 3 directories"
+
+if [[ ${#RECORDS[@]} -eq 3 ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+echo "Testing if in / there is not dir2"
+
+if [[ ! "${RECORDS[@]}" =~ "dir2" ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+RECORDS_DIR1=($(ls -f test.mdofs "/dir1"))
+
+if [[ ${#RECORDS_DIR1[@]} -eq 3 ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+echo "Testing if in dir1 there is dir2"
+
+if [[ "${RECORDS_DIR1[@]}" =~ "dir2" ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+RECORDS_DIR2=($(ls -f test.mdofs "/dir1/dir2"))
+
+echo "Testing dir2 - two records in dir2"
+
+if [[ ${#RECORDS_DIR2[@]} -eq 2 ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+echo "Testing if in dir2 there is . and .."
+
+if [[ "${RECORDS_DIR2[@]}" =~ "." && "${RECORDS_DIR2[@]}" =~ ".." ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+rm -f test.mdofs
+
+#########################################################
+
+echo "Testing if .. inside path works"
+
+init -f test.mdofs >/dev/null 2>&1
+mkdir -f test.mdofs "/dir1" >/dev/null 2>&1
+mkdir -f test.mdofs "/dir1/dir2" >/dev/null 2>&1
+mkdir -f test.mdofs "/dir1/dir2/dir3" >/dev/null 2>&1
+
+RECORDS=($(ls -f test.mdofs "/dir1/dir2/../dir2"))
+
+if [[ "${RECORDS[@]}" =~ "dir3" ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+echo "Testing if . inside path works"
+
+RECORDS=($(ls -f test.mdofs "/dir1/./dir2"))
+
+if [[ "${RECORDS[@]}" =~ "dir3" ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+rm -f test.mdofs
