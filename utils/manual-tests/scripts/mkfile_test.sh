@@ -12,6 +12,7 @@ echo "Testing mkfile empty file inside /"
 
 init -f test.mdofs >/dev/null 2>&1
 
+
 if mkfile -f test.mdofs "/file1" >/dev/null 2>&1;
 then
     echo "Passed"

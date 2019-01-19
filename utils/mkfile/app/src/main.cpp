@@ -9,10 +9,22 @@
 #include "tclap/CmdLine.h"
 #include "tclap/ValueArg.h"
 
+#include <boost/filesystem.hpp>
+
+#include <string>
+#include <fstream>
+#include <streambuf>
+
 using TCLAP::ArgException;
 using TCLAP::CmdLine;
 using TCLAP::UnlabeledValueArg;
 using TCLAP::ValueArg;
+using boost::filesystem::exists;
+using Path = boost::filesystem::path;
+
+bool fileExists(const std::string& filename) {
+    return exists(Path(filename));
+}
 
 int main(int argc, char** argv) {
     CmdLine cmd("Create new mdofs regular file");
@@ -44,10 +56,22 @@ int main(int argc, char** argv) {
 
     const int newFile = simplefs::creat(pathArg.getValue().c_str(), simplefs::AccessFlag::RDWR);
 
-    if (newFile) {
+    if (newFile < 0) {
         std::cerr << "creat operation failed" << std::endl;
 
         return 1;
+    }
+
+    if (!copyFromArg.getValue().empty()) {
+        if(fileExists(copyFromArg.getValue())) {
+            std::ifstream fileToCopy(copyFromArg.getValue().c_str());
+            std::string str((std::istreambuf_iterator<char>(fileToCopy)), std::istreambuf_iterator<char>());
+
+            simplefs::write(newFile, str.c_str(), str.size());
+        } else {
+            std::cerr << "File \"" << copyFromArg.getValue() << "\" does not exist to copy from\"" << std::endl;
+            return 1;
+        }
     }
 
     simplefs::close(newFile);
