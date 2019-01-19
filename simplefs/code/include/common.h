@@ -70,6 +70,12 @@ enum AccessFlag : unsigned int {
     RWEX = READ | WRITE | EXEC
 };
 
+enum SeekFlag : unsigned int {
+    SET,
+    CUR,
+    END
+};
+
 } // simplefs
 
 #endif //MDOFS_COMMON_H
