@@ -19,12 +19,13 @@ int simplefs::open(const char* name, int flags) {
         return -1;
     }
 
+    const bool noActiveDescriptors = !simplefs::NumActiveDescriptors;
     LockType lockType = LockType::RDLK;
     if (flags & AccessFlag::WRITE) {
         lockType = LockType::WRLK;
     }
 
-    if ( !simplefs::NumActiveDescriptors ) {
+    if ( noActiveDescriptors ) {
         auto inodeAndLock = getInodeTable(lockType);
 
         simplefs::InodesLockParams = inodeAndLock.first;
@@ -35,6 +36,7 @@ int simplefs::open(const char* name, int flags) {
     int node = simplefs::lookup(name, lockType);
 
     if (node == -1) {
+        // TODO error
         return -1;
     }
 
@@ -42,14 +44,29 @@ int simplefs::open(const char* name, int flags) {
 
     const unsigned int inodeMode = inode.mode();
 
+    // check if we are tring to open a directory
+    if ( inodeMode & AccessFlag::DIR ) {
+        if ( noActiveDescriptors ) {
+            unlock(simplefs::InodesLockParams);
+        }
+
+        // TODO error
+        return -1;
+    }
+
     // TODO check if flags are valid
     if ( flags & inodeMode != flags ) {
+        if ( noActiveDescriptors ) {
+            unlock(simplefs::InodesLockParams);
+        }
+
         // TODO error
         return -1;
     }
 
     struct flock lockParams;
 
+    // undefined behavior if none of these flags are requested
     if ( flags & DescriptorFlag::DESCR_WRITE ) {
         lockParams = simplefs::lock(inode.origin() + simplefs::Inodes.filesystem_origin(),
                 inode.size(),
