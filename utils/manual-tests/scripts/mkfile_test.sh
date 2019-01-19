@@ -4,7 +4,7 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 TEST_FILES_PATH="$PROJECT_ROOT/utils/manual-tests/test-files"
 
 PATH="$TEST_FILES_PATH:$PATH"
-cd "$TEST_FILES_PATH"
+cd "$TEST_FILES_PATH" || exit 1
 
 
 
@@ -21,7 +21,7 @@ fi
 
 echo "Testing if 3 records in / after mkfile empty file"
 
-RECORDS=($(ls -f test.mdofs "/"))
+mapfile -t RECORDS < <(ls -f test.mdofs "/")
 
 if [[ ${#RECORDS[@]} -eq 3 ]]
 then
@@ -62,7 +62,7 @@ fi
 
 echo "Testing if 3 records in /dir1 after mkfile empty file"
 
-RECORDS=($(ls -f test.mdofs "/dir1"))
+mapfile -t RECORDS < <(ls -f test.mdofs "/dir1")
 
 if [[ ${#RECORDS[@]} -eq 3 ]]
 then
@@ -105,7 +105,7 @@ fi
 
 echo "Testing if 4 records in /dir1 after mkfile 2 empty files"
 
-RECORDS=($(ls -f test.mdofs "/dir1"))
+mapfile -t RECORDS < <(ls -f test.mdofs "/dir1")
 
 if [[ ${#RECORDS[@]} -eq 4 ]]
 then
@@ -133,7 +133,7 @@ mkdir -f test.mdofs "/dir1/dir2" >/dev/null 2>&1
 
 echo "Testing if 5 records in /dir1 after mkfile 2 empty files and directory"
 
-RECORDS=($(ls -f test.mdofs "/dir1"))
+mapfile -t RECORDS < <(ls -f test.mdofs "/dir1")
 
 if [[ ${#RECORDS[@]} -eq 5 ]]
 then
