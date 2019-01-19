@@ -44,7 +44,7 @@ for NAME in ${RECORDS[@]} ; do
     echo ${NAME}
 done
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 #################################################################
 
@@ -85,7 +85,7 @@ for NAME in ${RECORDS[@]} ; do
     echo ${NAME}
 done
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 #########################################################################
 
@@ -147,13 +147,6 @@ for NAME in ${RECORDS[@]} ; do
     echo ${NAME}
 done
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 ###########################################################
-
-#TODO add tests for -c option
-
-
-
-
-

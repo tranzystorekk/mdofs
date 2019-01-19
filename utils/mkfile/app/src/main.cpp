@@ -9,6 +9,7 @@
 
 #include "tclap/CmdLine.h"
 #include "tclap/ValueArg.h"
+#include "tclap/SwitchArg.h"
 
 #include <boost/filesystem.hpp>
 
@@ -20,6 +21,7 @@ using TCLAP::ArgException;
 using TCLAP::CmdLine;
 using TCLAP::UnlabeledValueArg;
 using TCLAP::ValueArg;
+using TCLAP::SwitchArg;
 using boost::filesystem::exists;
 using Path = boost::filesystem::path;
 
@@ -40,6 +42,10 @@ int main(int argc, char** argv) {
     ValueArg<std::string> copyFromArg("c", "copy", "Path to the existing file in native filesystem to copy content from",
                                   false, "", "path");
     cmd.add(copyFromArg);
+
+    SwitchArg inputArg("i", "input", "Read file from standard input");
+
+    cmd.add(inputArg);
 
     try {
         cmd.parse(argc, argv);
@@ -63,6 +69,11 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    if (!copyFromArg.getValue().empty() && inputArg.getValue()) {
+        std::cerr << "Both flags -i and -c set" << std::endl;
+        return 1;
+    }
+
     if (!copyFromArg.getValue().empty()) {
         if(fileExists(copyFromArg.getValue())) {
             std::ifstream fileToCopy(copyFromArg.getValue().c_str());
@@ -76,7 +87,7 @@ int main(int argc, char** argv) {
             std::cerr << "File \"" << copyFromArg.getValue() << "\" does not exist to copy from\"" << std::endl;
             return 1;
         }
-    } else {
+    } else if (inputArg.getValue()){
         std::cin >> std::noskipws;
         std::istream_iterator<char> it(std::cin);
         std::istream_iterator<char> end;

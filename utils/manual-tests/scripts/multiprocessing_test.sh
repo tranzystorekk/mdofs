@@ -36,4 +36,4 @@ else
     echo "Failed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs

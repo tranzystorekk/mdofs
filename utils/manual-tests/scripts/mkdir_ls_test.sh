@@ -46,7 +46,7 @@ else
     echo "Failed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 echo "Testing mkdir /"
 
@@ -83,7 +83,7 @@ for NAME in "${RECORDS[@]}" ; do
 done
 
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 echo "Testing after adding new folder, 3 records in root"
 
@@ -129,7 +129,7 @@ else
     echo "Failed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 ########################################################
 
@@ -197,7 +197,7 @@ else
     echo "Failed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 #########################################################
 
@@ -228,4 +228,4 @@ else
     echo "Failed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs

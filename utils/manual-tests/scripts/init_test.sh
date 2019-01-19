@@ -16,7 +16,7 @@ else
     echo "Failed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 echo "Testing default size bigger than 1MB"
 
@@ -31,7 +31,7 @@ else
     echo "Failed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 echo "Testing multiple instances of the same name"
 
@@ -44,7 +44,7 @@ else
     echo "Passed"
 fi
 
-rm -f test.mdofs
+/usr/bin/rm -f test.mdofs
 
 echo "Testing size > 4MB"
 
@@ -59,7 +59,7 @@ else
     echo "Failed"
 fi
 
-rm -f test4mb.mdofs
+/usr/bin/rm -f test4mb.mdofs
 
 echo "Testing size = 0"
 
