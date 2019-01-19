@@ -2,7 +2,6 @@
 #include <common.h>
 
 #include "handle-management.hpp"
-#include "creat.h"
 #include "read.h"
 #include "open.h"
 
@@ -19,12 +18,6 @@ using TCLAP::ArgException;
 using TCLAP::CmdLine;
 using TCLAP::UnlabeledValueArg;
 using TCLAP::ValueArg;
-using boost::filesystem::exists;
-using Path = boost::filesystem::path;
-
-bool fileExists(const std::string& filename) {
-    return exists(Path(filename));
-}
 
 int main(int argc, char** argv) {
     CmdLine cmd("View content of a mdofs regular file");

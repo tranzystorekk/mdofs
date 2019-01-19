@@ -10,6 +10,7 @@ add_library(
         src/creat.cpp
         src/write.cpp
         src/read.cpp
+        src/unlink.cpp
         src/shared-vars.cpp
 )
 
