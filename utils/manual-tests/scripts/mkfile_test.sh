@@ -149,6 +149,10 @@ done
 
 rm -f test.mdofs
 
+###########################################################
+
+#TODO add tests for -c option
+
 
 
 

@@ -2,7 +2,7 @@
 #include <common.h>
 
 #include "handle-management.hpp"
-#include "read.h"
+#include "lseek.h"
 #include "open.h"
 
 #include "tclap/CmdLine.h"
@@ -20,13 +20,13 @@ using TCLAP::UnlabeledValueArg;
 using TCLAP::ValueArg;
 
 int main(int argc, char** argv) {
-    CmdLine cmd("View content of a mdofs regular file");
+    CmdLine cmd("Print size of a mdofs regular file");
 
     ValueArg<std::string> fileArg("f", "file", "Path to the existing filesystem file",
                                   true, "", "path");
     cmd.add(fileArg);
 
-    UnlabeledValueArg<std::string> pathArg("path", "Path to the file to be opened within the filesystem", true, "", "path");
+    UnlabeledValueArg<std::string> pathArg("path", "Path to the file to print size within the filesystem", true, "", "path");
     cmd.add(pathArg);
 
     try {
@@ -54,19 +54,13 @@ int main(int argc, char** argv) {
 
 //    std::cout << "File \"" << pathArg.getValue() << "\" was opened successfully" << std::endl;
 
-    std::string str;
-    char buf;
-    int read_ret = 0;
-    while ((read_ret = simplefs::read(openedFile, &buf, 1)) > 0) {
-        str.push_back(buf);
-    }
-    if (read_ret < 0) {
-        std::cerr << "Failed to read from\"" << pathArg.getValue() << '\"' << std::endl;
+    int file_size = 0;
+    if ((file_size = simplefs::lseek(openedFile, simplefs::SeekFlag::END)) < 0) {
+        std::cerr << "Failed to print size of filesystem file\"" << pathArg.getValue() << '\"' << std::endl;
         return 1;
     }
 
-//    std::cout << "File content: " << std::endl;
-    std::cout << str;
+    std::cout << "File: \"" << pathArg.getValue() << "\"    " << "Size: " << file_size << std::endl;
 
     simplefs::close(openedFile);
 
@@ -74,6 +68,7 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
 
 
 
