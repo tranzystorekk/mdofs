@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-TEST_FILES_PATH="$PROJECT_ROOT/utils/manual-tests/test-files"
+bash setup_test_env.sh
+source env_vars.sh
 
-PATH="$TEST_FILES_PATH:$PATH"
+PATH="$BIN_PATH:$PATH"
 cd "$TEST_FILES_PATH" || exit 1
 
 NUM_LS_INVOCATIONS=100

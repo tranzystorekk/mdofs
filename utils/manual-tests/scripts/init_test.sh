@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-TEST_FILES_PATH="$PROJECT_ROOT/utils/manual-tests/test-files"
+bash setup_test_env.sh
+source env_vars.sh
 
-PATH="$TEST_FILES_PATH:$PATH"
 cd "$TEST_FILES_PATH"
 
 echo "Testing making an instance of file system"
