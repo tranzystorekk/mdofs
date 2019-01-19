@@ -15,7 +15,7 @@ using TCLAP::UnlabeledValueArg;
 using TCLAP::ValueArg;
 
 int main(int argc, char** argv) {
-    CmdLine cmd("Print contents of an mdofs regular file");
+    CmdLine cmd("Create new mdofs regular file");
 
     ValueArg<std::string> fileArg("f", "file", "Path to the existing filesystem file",
                                   true, "", "path");
