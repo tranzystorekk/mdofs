@@ -53,12 +53,13 @@ int main(int argc, char** argv) {
     const int openedFile = simplefs::open(pathArg.getValue().c_str(), simplefs::AccessFlag::READ);
 
     if (openedFile < 0) {
-        std::cerr << "open operation failed" << std::endl;
+        std::cout << "Failed to open file\"" << pathArg.getValue() << "\"" << std::endl;
+
 
         return 1;
     }
 
-    std::cout << "File \"" << pathArg.getValue() << "\" was opened successfully" << std::endl;
+//    std::cout << "File \"" << pathArg.getValue() << "\" was opened successfully" << std::endl;
 
     std::string str;
     char buf;
@@ -71,7 +72,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    std::cout << "File content: " << std::endl;
+//    std::cout << "File content: " << std::endl;
     std::cout << str << std::endl;
 
     simplefs::close(openedFile);
