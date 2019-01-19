@@ -67,7 +67,10 @@ int main(int argc, char** argv) {
             std::ifstream fileToCopy(copyFromArg.getValue().c_str());
             std::string str((std::istreambuf_iterator<char>(fileToCopy)), std::istreambuf_iterator<char>());
 
-            simplefs::write(newFile, str.c_str(), str.size());
+            if (simplefs::write(newFile, str.c_str(), str.size()) < 0) {
+                std::cerr << "Failed to write to file in filesystem\"" << pathArg.getValue() << '\"' << std::endl;
+                return 1;
+            }
         } else {
             std::cerr << "File \"" << copyFromArg.getValue() << "\" does not exist to copy from\"" << std::endl;
             return 1;
