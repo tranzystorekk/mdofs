@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <common.h>
 
 #include "handle-management.hpp"
@@ -73,6 +74,16 @@ int main(int argc, char** argv) {
             }
         } else {
             std::cerr << "File \"" << copyFromArg.getValue() << "\" does not exist to copy from\"" << std::endl;
+            return 1;
+        }
+    } else {
+        std::cin >> std::noskipws;
+        std::istream_iterator<char> it(std::cin);
+        std::istream_iterator<char> end;
+        std::string str(it, end);
+
+        if (simplefs::write(newFile, str.c_str(), str.size()) < 0) {
+            std::cerr << "Failed to write to file in filesystem\"" << pathArg.getValue() << '\"' << std::endl;
             return 1;
         }
     }

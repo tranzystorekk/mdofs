@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
     }
 
 //    std::cout << "File content: " << std::endl;
-    std::cout << str << std::endl;
+    std::cout << str;
 
     simplefs::close(openedFile);
 
