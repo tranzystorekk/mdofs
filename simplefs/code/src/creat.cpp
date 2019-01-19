@@ -58,7 +58,7 @@ int simplefs::creat(const char* name, int mode) {
     }
 
     // check if requested file name already exists
-    if (parentDirAndLock.second.records().count(name)) {
+    if (parentDirAndLock.second.records().count(simplefs::getBaseName(name))) {
         // unlock all created locks
         if ( noActiveDescriptors ) {
             unlock(tempLockParams);
