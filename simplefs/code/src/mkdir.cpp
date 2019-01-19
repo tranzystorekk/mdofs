@@ -32,6 +32,10 @@ int simplefs::mkdir(const char* name) {
     int parentDirNodeIndex = simplefs::lookup(parentPath.c_str(), LockType::WRLK);
 
     if ( parentDirNodeIndex == -1 ) {
+        if (noActiveDescriptors) {
+            unlock(tempLockParams);
+        }
+
         // TODO error
         return -1;
     }
