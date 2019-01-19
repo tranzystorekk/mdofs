@@ -3,16 +3,6 @@
 #include "auxilliary.h"
 #include "locking.h"
 
-unsigned int findNextFreeDescriptor() {
-    for (unsigned int i = simplefs::FirstFreeDescriptor; i < simplefs::MAX_FILE_DESCRIPTORS; ++i) {
-        if ( simplefs::FdTable[i].is_free ) {
-            return i;
-        }
-    }
-
-    return simplefs::MAX_FILE_DESCRIPTORS;
-}
-
 int simplefs::open(const char* name, int flags) {
     if ( simplefs::NumActiveDescriptors >= simplefs::MAX_FILE_DESCRIPTORS ) {
         // TODO error
