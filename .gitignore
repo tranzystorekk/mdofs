@@ -1,6 +1,7 @@
 .idea/
 cmake-build-*/
 fsproto/generated/*.pb.*
+docs/
 
 utils/manual-tests/test-files/
 utils/manual-tests/bin/
