@@ -86,5 +86,10 @@ int main(int argc, char** argv) {
 
     std::cout << "New mdofs instance \"" << fileArg.getValue() << "\" created successfully" << std::endl;
 
+    const std::string& fileName = fileArg.getValue();
+    if (fsinit::validateFileName(fileName)) {
+        std::cout << fsinit::getErrorString() << std::endl;
+    }
+
     return 0;
 }
