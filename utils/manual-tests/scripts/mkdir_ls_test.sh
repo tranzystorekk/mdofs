@@ -35,6 +35,54 @@ else
     FAILED_COUNTER=$((FAILED_COUNTER+1))
 fi
 
+echo "Testing ls on /.."
+
+mapfile -t RECORDS < <(ls -f test.mdofs "/..")
+
+if [[ ${#RECORDS[@]} -eq 2 ]]
+then
+    echo "Passed"
+    PASSED_COUNTER=$((PASSED_COUNTER+1))
+else
+    echo "Failed"
+    FAILED_COUNTER=$((FAILED_COUNTER+1))
+fi
+
+echo "Testing /.. contains . and .."
+
+if [[ "${RECORDS[@]}" =~ "." && "${RECORDS[@]}" =~ ".." ]]
+then
+    echo "Passed"
+    PASSED_COUNTER=$((PASSED_COUNTER+1))
+else
+    echo "Failed"
+    FAILED_COUNTER=$((FAILED_COUNTER+1))
+fi
+
+echo "Testing ls on /."
+
+mapfile -t RECORDS < <(ls -f test.mdofs "/.")
+
+if [[ ${#RECORDS[@]} -eq 2 ]]
+then
+    echo "Passed"
+    PASSED_COUNTER=$((PASSED_COUNTER+1))
+else
+    echo "Failed"
+    FAILED_COUNTER=$((FAILED_COUNTER+1))
+fi
+
+echo "Testing /. contains . and .."
+
+if [[ "${RECORDS[@]}" =~ "." && "${RECORDS[@]}" =~ ".." ]]
+then
+    echo "Passed"
+    PASSED_COUNTER=$((PASSED_COUNTER+1))
+else
+    echo "Failed"
+    FAILED_COUNTER=$((FAILED_COUNTER+1))
+fi
+
 echo "Testing invalid path to folder"
 
 if ls -f test.mdofs "" >/dev/null 2>&1;
@@ -263,6 +311,36 @@ echo "Testing if . inside path works"
 mapfile -t RECORDS < <(ls -f test.mdofs "/dir1/./dir2")
 
 if [[ "${RECORDS[@]}" =~ "dir3" ]]
+then
+    echo "Passed"
+    PASSED_COUNTER=$((PASSED_COUNTER+1))
+else
+    echo "Failed"
+    FAILED_COUNTER=$((FAILED_COUNTER+1))
+fi
+
+echo "Testing if .. inside path works"
+
+init -f test.mdofs >/dev/null 2>&1
+mkdir -f test.mdofs "/dir1" >/dev/null 2>&1
+mkdir -f test.mdofs "/dir1/dir2" >/dev/null 2>&1
+
+mapfile -t RECORDS < <(ls -f test.mdofs "/../dir1")
+
+if [[ "${RECORDS[@]}" =~ "dir2" ]]
+then
+    echo "Passed"
+    PASSED_COUNTER=$((PASSED_COUNTER+1))
+else
+    echo "Failed"
+    FAILED_COUNTER=$((FAILED_COUNTER+1))
+fi
+
+echo "Testing if . inside path works"
+
+mapfile -t RECORDS < <(ls -f test.mdofs "/.././dir1")
+
+if [[ "${RECORDS[@]}" =~ "dir2" ]]
 then
     echo "Passed"
     PASSED_COUNTER=$((PASSED_COUNTER+1))
