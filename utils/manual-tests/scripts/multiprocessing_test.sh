@@ -100,3 +100,62 @@ fi
 
 /usr/bin/rm -f test.mdofs
 
+#######################################################################
+
+function concurrent_cat() {
+    WAS_SUCCESS=0
+    WAS_FAIL=0
+
+    pids=()
+    for i in $(seq "${NUM_LS_INVOCATIONS}"); do
+        cat -f "test.mdofs" "/file1" >/dev/null &
+        pids+=("$!")
+    done
+
+    for p in ${pids[@]}; do
+            if wait "$p"; then
+#                    echo "Process $p success"
+                    WAS_SUCCESS=1
+            else
+#                    echo "Process $p fail"
+                    WAS_FAIL=1
+            fi
+    done
+
+    if [[ $WAS_SUCCESS -eq 1 ]] && [[ $WAS_FAIL -eq 1 ]]
+    then
+        echo "Operation occured during other: TEST OK"
+    else
+        echo "Operation didn't occur during other: TEST UNDEFINED"
+    fi
+}
+
+echo "Testing concurrent cat and mkfile"
+
+init -f test.mdofs >/dev/null 2>&1
+
+concurrent_cat &
+
+sleep 1
+mkfile -f test.mdofs "/file1" >/dev/null 2>&1
+MKFILE_PID="$!"
+
+wait "$MKFILE_PID"
+MKFILE_EXIT_CODE="$?"
+
+wait
+
+if [[ ${MKFILE_EXIT_CODE} -eq 0 ]]
+then
+    echo "Passed"
+else
+    echo "Failed"
+fi
+
+/usr/bin/rm -f test.mdofs
+
+################################################################
+
+
+
+
