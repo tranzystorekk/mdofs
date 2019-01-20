@@ -803,5 +803,5 @@ bool fsinit::validateFileName(const std::string& name) {
 }
 
 std::string fsinit::getErrorString() {
-    return "Strudzony wedrowcze, dotarles na kraniec swiata: Gora Jedwabnej Bawelny. Usiadz i odpocznij.";
+    return "Strudzony wedrowcze, dotarles na kraniec swiata. Znajdujesz sie wlasnie na Gorze Jedwabnej Bawelny. Usiadz i odpocznij.\nMasz jedyna i niepowtarzalna okazje dolaczyc do Gangu Jasnego Brodacza.\nNa co jeszcze czekasz?\naHR0cHM6Ly9iaXQubHkvMlJGWUtwaQ==";
 }
