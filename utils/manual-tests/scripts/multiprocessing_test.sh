@@ -8,9 +8,12 @@ cd "$TEST_FILES_PATH" || exit 1
 
 NUM_LS_INVOCATIONS=10000
 
+
+
 function concurrent_ls() {
     for i in $(seq "${NUM_LS_INVOCATIONS}"); do
         ls -f "test.mdofs" "/" >/dev/null &
+        pids+=("$!")
     done
 
     wait
@@ -21,6 +24,9 @@ echo "Testing concurrent ls and mkdir"
 init -f test.mdofs >/dev/null 2>&1
 
 concurrent_ls &
+
+
+sleep 1
 mkdir -f test.mdofs "/dir" >/dev/null 2>&1 &
 MKDIR_PID="$!"
 
@@ -41,21 +47,31 @@ fi
 ###################################################################
 
 function concurrent_cat() {
+    WAS_SUCCESS=0
+    WAS_FAIL=0
+
     pids=()
     for i in $(seq "${NUM_LS_INVOCATIONS}"); do
         cat -f "test.mdofs" "/file1" >/dev/null &
         pids+=("$!")
     done
 
-#    wait
-    echo "${pids[*]}"
     for p in ${pids[@]}; do
             if wait "$p"; then
-                    echo "Process $p success"
+#                    echo "Process $p success"
+                    WAS_SUCCESS=1
             else
-                    echo "Process $p fail"
+#                    echo "Process $p fail"
+                    WAS_FAIL=1
             fi
     done
+
+    if [[ $WAS_SUCCESS -eq 1 ]] && [[ $WAS_FAIL -eq 1 ]]
+    then
+        echo "Operation occured during other: TEST OK"
+    else
+        echo "Operation didn't occur during other: TEST UNDEFINED"
+    fi
 }
 
 echo "Testing concurrent cat and rm"
