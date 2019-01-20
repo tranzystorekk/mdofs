@@ -69,12 +69,12 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    if (!copyFromArg.getValue().empty() && inputArg.getValue()) {
+    if (copyFromArg.isSet() && inputArg.getValue()) {
         std::cerr << "Both flags -i and -c set" << std::endl;
         return 1;
     }
 
-    if (!copyFromArg.getValue().empty()) {
+    if (copyFromArg.isSet()) {
         if(fileExists(copyFromArg.getValue())) {
             std::ifstream fileToCopy(copyFromArg.getValue().c_str());
             std::string str((std::istreambuf_iterator<char>(fileToCopy)), std::istreambuf_iterator<char>());

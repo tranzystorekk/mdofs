@@ -39,14 +39,14 @@ int main(int argc, char** argv) {
     const int errCode = simplefs::openFilesystem(fileArg.getValue().c_str(), O_RDONLY);
 
     if (errCode) {
-        std::cerr << "Failed to open filesystem file\"" << fileArg.getValue() << '\"' << std::endl;
+        std::cerr << "Failed to open filesystem file \"" << fileArg.getValue() << '\"' << std::endl;
         return 1;
     }
 
     const int openedFile = simplefs::open(pathArg.getValue().c_str(), simplefs::AccessFlag::READ);
 
     if (openedFile < 0) {
-        std::cout << "Failed to open file\"" << pathArg.getValue() << "\"" << std::endl;
+        std::cout << "Failed to open file \"" << pathArg.getValue() << "\"" << std::endl;
 
 
         return 1;
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
         str.push_back(buf);
     }
     if (read_ret < 0) {
-        std::cerr << "Failed to read from\"" << pathArg.getValue() << '\"' << std::endl;
+        std::cerr << "Failed to read from \"" << pathArg.getValue() << '\"' << std::endl;
         return 1;
     }
 
