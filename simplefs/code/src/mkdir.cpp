@@ -23,7 +23,6 @@ int simplefs::mkdir(const char* name) {
         if (simplefs::Inodes.first_free_node_index() >= simplefs::Inodes.max_inodes()) {
             unlock(tempLockParams);
 
-            // TODO error
             return -1;
         }
     }
@@ -36,7 +35,6 @@ int simplefs::mkdir(const char* name) {
             unlock(tempLockParams);
         }
 
-        // TODO error
         return -1;
     }
 
@@ -58,7 +56,6 @@ int simplefs::mkdir(const char* name) {
             unlock(parentDirAndLock.first);
         }
 
-        // TODO error
         return -1;
     }
 
@@ -71,7 +68,6 @@ int simplefs::mkdir(const char* name) {
             unlock(parentDirAndLock.first);
         }
 
-        // TODO error
         return -1;
     }
 

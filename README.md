@@ -56,3 +56,5 @@ These programs provide a user-friendly command line entry point to the filesyste
 ##### mkfile
 
 ##### rm
+
+##### fsize

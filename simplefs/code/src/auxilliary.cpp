@@ -103,13 +103,6 @@ std::pair<struct flock, fsproto::Directory>
 simplefs::getDirectory(const fsproto::InodeTable& table, int inode, LockType lockType) {
     const Inode& node = table.inodes(inode);
 
-    if ( node.is_free() ) {
-        // TODO indicate error
-    }
-    if ( !(node.mode() & AccessFlag::DIR) ) {
-        // TODO indicate 'not a directory' error
-    }
-
     auto lockParams = lock(node.origin() + table.filesystem_origin(),
             MAX_DIRECTORY_SIZE + sizeof(uint32_t),
             lockType);

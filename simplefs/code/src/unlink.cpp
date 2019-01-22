@@ -26,7 +26,6 @@ int simplefs::unlink(const char* name) {
             unlock(tempLockParams);
         }
 
-        // TODO error
         return -1;
     }
 
@@ -41,7 +40,6 @@ int simplefs::unlink(const char* name) {
             unlock(parentDirAndLock.first);
         }
 
-        // TODO error
         return -1;
     }
 
@@ -54,7 +52,6 @@ int simplefs::unlink(const char* name) {
 
         unlock(parentDirAndLock.first);
 
-        // TODO error
         return -1;
     }
 
@@ -72,7 +69,6 @@ int simplefs::unlink(const char* name) {
             unlock(parentDirAndLock.first);
             unlock(deletedDirAndInode.first);
 
-            // TODO error
             return -1;
         }
 

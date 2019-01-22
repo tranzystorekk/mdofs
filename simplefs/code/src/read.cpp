@@ -6,12 +6,10 @@
 
 int simplefs::read(int fd, char* buf, int len) {
     if (buf == nullptr) {
-        // TODO error
         return -1;
     }
 
     if (len < 0) {
-        // TODO error
         return -1;
     } else if (len == 0) {
         return 0;
@@ -19,7 +17,6 @@ int simplefs::read(int fd, char* buf, int len) {
 
     // check if desciptor index is valid
     if (fd < 0 || fd >= simplefs::MAX_FILE_DESCRIPTORS) {
-        // TODO error
         return -1;
     }
 
@@ -27,7 +24,6 @@ int simplefs::read(int fd, char* buf, int len) {
 
     // check if file descriptor is actually open
     if (fileDescriptor.is_free) {
-        // TODO error
         return -1;
     }
 

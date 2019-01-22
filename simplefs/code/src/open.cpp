@@ -5,7 +5,6 @@
 
 int simplefs::open(const char* name, int flags) {
     if ( simplefs::NumActiveDescriptors >= simplefs::MAX_FILE_DESCRIPTORS ) {
-        // TODO error
         return -1;
     }
 
@@ -26,7 +25,6 @@ int simplefs::open(const char* name, int flags) {
     int node = simplefs::lookup(name, lockType);
 
     if (node == -1) {
-        // TODO error
         return -1;
     }
 
@@ -40,17 +38,14 @@ int simplefs::open(const char* name, int flags) {
             unlock(simplefs::InodesLockParams);
         }
 
-        // TODO error
         return -1;
     }
 
-    // TODO check if flags are valid
     if ( flags & inodeMode != flags ) {
         if ( noActiveDescriptors ) {
             unlock(simplefs::InodesLockParams);
         }
 
-        // TODO error
         return -1;
     }
 
@@ -81,14 +76,12 @@ int simplefs::open(const char* name, int flags) {
 
 int simplefs::close(int fd) {
     if (fd < 0 || fd >= simplefs::MAX_FILE_DESCRIPTORS) {
-        // TODO error
         return -1;
     }
 
     simplefs::FileDescriptor& closedDescriptor = simplefs::FdTable[fd];
 
     if ( closedDescriptor.is_free ) {
-        // TODO error
         return -1;
     }
 

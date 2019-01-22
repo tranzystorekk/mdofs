@@ -11,7 +11,6 @@
 
 int simplefs::creat(const char* name, int mode) {
     if ( simplefs::NumActiveDescriptors >= simplefs::MAX_FILE_DESCRIPTORS ) {
-        // TODO error
         return -1;
     }
 
@@ -28,7 +27,6 @@ int simplefs::creat(const char* name, int mode) {
         if (simplefs::Inodes.first_free_node_index() >= simplefs::Inodes.max_inodes()) {
             unlock(tempLockParams);
 
-            // TODO error
             return -1;
         }
     }
@@ -37,11 +35,8 @@ int simplefs::creat(const char* name, int mode) {
     int parentDirNodeIndex = simplefs::lookup(parentPath.c_str(), LockType::WRLK);
 
     if ( parentDirNodeIndex == -1 ) {
-        // TODO error
         return -1;
     }
-
-    // TODO change lock on inode table to WRITE type
 
     auto parentDirAndLock = simplefs::getDirectory(simplefs::Inodes, parentDirNodeIndex, LockType::WRLK);
 
@@ -53,7 +48,6 @@ int simplefs::creat(const char* name, int mode) {
             unlock(parentDirAndLock.first);
         }
 
-        // TODO error
         return -1;
     }
 
@@ -65,7 +59,6 @@ int simplefs::creat(const char* name, int mode) {
             unlock(parentDirAndLock.first);
         }
 
-        // TODO error
         return -1;
     }
 

@@ -4,7 +4,6 @@
 
 int simplefs::lseek(int fd, int whence, int offset) {
     if (fd < 0 || fd >= simplefs::MAX_FILE_DESCRIPTORS) {
-        // TODO error
         return -1;
     }
 
@@ -12,7 +11,6 @@ int simplefs::lseek(int fd, int whence, int offset) {
 
     // check if file descriptor is actually open
     if (fileDescriptor.is_free) {
-        // TODO error
         return -1;
     }
 
@@ -23,7 +21,6 @@ int simplefs::lseek(int fd, int whence, int offset) {
     switch (whence) {
         case SeekFlag::SET:
             if (offset < 0 || offset > fileSize) {
-                // TODO error
                 return -1;
             }
 
@@ -35,7 +32,6 @@ int simplefs::lseek(int fd, int whence, int offset) {
                 const int newOffset = filePos + offset;
 
                 if (newOffset < 0 || newOffset > fileSize) {
-                    // TODO error
                     return -1;
                 }
 
@@ -48,7 +44,6 @@ int simplefs::lseek(int fd, int whence, int offset) {
             break;
 
         default:
-            // TODO error
             return -1;
     }
 
