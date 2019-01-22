@@ -799,9 +799,11 @@ void fsinit::createFilesystem(const std::string& filepath, unsigned int maxFiles
 
 bool fsinit::validateFileName(const std::string& name) {
     // important check
-    return name.rfind(".gjb") == name.size() - 4;
+    return name.rfind(".uxp") == name.size() - 4;
 }
 
 std::string fsinit::getErrorString() {
-    return "Strudzony wedrowcze, dotarles na kraniec swiata. Znajdujesz sie wlasnie na Gorze Jedwabnej Bawelny. Usiadz i odpocznij.\nMasz jedyna i niepowtarzalna okazje dolaczyc do Gangu Jasnego Brodacza.\nNa co jeszcze czekasz?\naHR0cHM6Ly9iaXQubHkvMlJGWUtwaQ==";
+    return "Strudzony wedrowcze, dotarles na kraniec swiata. Znajdujesz sie wlasnie na Unikalnym Ekstremum Produkcji."
+           " Usiadz i odpocznij.\nMasz jedyna i niepowtarzalna okazje dolaczyc do Upiornych Ekstra Podalaczy."
+           "\nNa co jeszcze czekasz?";
 }
